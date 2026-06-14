@@ -1,4 +1,4 @@
-# Tail-Aware Residual Alpha Engine
+# Tail-Aware Residual Alpha Referee
 
 **A risk-aware *alpha referee*: a framework that decides whether a residual equity signal is genuine stock-specific predictability, a hidden crash-risk premium dressed as alpha, inconclusive, or backtest luck — and that is built to *refuse to certify* weak, risky, or lucky signals.**
 
@@ -137,8 +137,8 @@ Each notebook runs end-to-end (`Restart & Run All`). They ship in **DEMO mode** 
 ```text
 .
 ├── notebooks/
-│   ├── 01_synthetic_referee_validation.ipynb   # frozen referee + held-out MC
-│   ├── 02_f0_sp100_public_data.ipynb                # first real run; double-gate demo
+│   ├── 01_synthetic_referee_validation.ipynb       # frozen referee + held-out MC
+│   ├── 02_f0_sp100_public_data.ipynb               # first real run; double-gate demo
 │   ├── 03_f0_sp500_public_data.ipynb               # broad universe
 │   ├── 04_f0_smallcap_public_data.ipynb            # small/mid-cap robustness
 │   └── 05_f0_declared_hidden_risk_harvesters.ipynb # pre-registered H2 test
