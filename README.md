@@ -137,14 +137,13 @@ Each notebook runs end-to-end (`Restart & Run All`). They ship in **DEMO mode** 
 ```text
 .
 ├── notebooks/
-│   ├── 01_v1_4_synthetic_referee_validation.ipynb   # frozen referee + held-out MC
+│   ├── 01_synthetic_referee_validation.ipynb   # frozen referee + held-out MC
 │   ├── 02_f0_sp100_public_data.ipynb                # first real run; double-gate demo
-│   ├── 03_f0b_sp500_public_data.ipynb               # broad universe
-│   ├── 04_f0c_smallcap_public_data.ipynb            # small/mid-cap robustness
-│   └── 05_f0d_declared_hidden_risk_harvesters.ipynb # pre-registered H2 test
+│   ├── 03_f0_sp500_public_data.ipynb               # broad universe
+│   ├── 04_f0_smallcap_public_data.ipynb            # small/mid-cap robustness
+│   └── 05_f0_declared_hidden_risk_harvesters.ipynb # pre-registered H2 test
 ├── README.md
 ├── PROJECT_SUMMARY.md
-├── RESUME_BULLETS.md
 └── outputs/
 ```
 
