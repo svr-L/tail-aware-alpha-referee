@@ -1,156 +1,83 @@
 # Project Summary — Tail-Aware Residual Alpha Engine
 
-## One-line description
+## One line
 
-A risk-aware alpha-validation framework that tests whether residual equity signals represent genuine stock-specific predictability, hidden crash-risk premia, inconclusive evidence or backtest luck.
+A risk-aware **alpha-validation framework** that decides whether a residual equity signal is genuine stock-specific predictability (`H1`), a hidden crash-risk premium dressed as alpha (`H2`), inconclusive (`H0`), or backtest luck (`H3`).
 
----
+## Positioning
 
-## Best positioning
+This is not an *"I found alpha"* project. It is an *"I built an alpha referee — and showed it works"* project.
 
-This is not an “I found alpha” project.  
-It is an “I built an alpha referee” project.
+Strongest one-liner:
 
-The project is strongest when described as:
+> A disciplined alpha-validation framework that applies market-risk thinking to alpha research — validated out-of-sample on synthetic worlds with known ground truth, then stress-tested on real public equity data, where it behaved exactly as a conservative referee should.
 
-> a disciplined alpha-validation framework that applies market-risk thinking to alpha research.
-
-It is especially useful for Quant Research / Systematic Investing because it connects:
-
-- factor modelling;
-- PCA/residualization;
-- residual momentum/reversal;
-- downside and drawdown risk;
-- coskewness/tail diagnostics;
-- placebo tests;
-- deflated-Sharpe-style luck gates;
-- public-data equity validation.
+It is well-suited to Quant Research / Systematic Investing because it connects, in one coherent pipeline: factor modelling, PCA/residualization, residual momentum/reversal, downside & drawdown risk, coskewness/tail diagnostics, placebo tests, a deflated-Sharpe luck gate, pre-registration, and public-data equity validation.
 
 ---
 
-## Why it is strong
+## Why it is strong (the research-maturity case)
 
-The project shows research maturity in three ways:
-
-1. **It does not overclaim.**  
-   Weak public-data signals are rejected instead of being marketed as alpha.
-
-2. **It separates performance from explanation.**  
-   A signal must pass both a luck gate and a hidden-risk gate.
-
-3. **It allows quarantine.**  
-   The `H0_inconclusive` state prevents the false binary “alpha vs no alpha.”
+1. **It does not overclaim.** Weak public-data signals are *rejected*, not marketed as alpha.
+2. **It separates performance from explanation.** A signal must pass both a luck gate *and* a hidden-risk gate.
+3. **It allows quarantine.** The `H0_inconclusive` state avoids the false "alpha vs no alpha" binary.
+4. **It follows a real validation protocol.** Two design→freeze→held-out cycles; thresholds frozen with **pre-registered** targets before the held-out run; an honest **3/4** outcome (one target missed and reported).
+5. **It tested a hypothesis that failed.** A mechanism-targeted fifth tail condition was tried, failed on the design set, and was discarded in favor of a graded score that empirically dominated a blunt rule — a documented "I tried the obvious thing, it didn't work, here's why" arc.
+6. **It is reproducible.** Synthetic runs reproduce bit-for-bit across machines; every notebook ships executed.
 
 ---
 
 ## Core evidence
 
-### V1.4 synthetic validation
+### Synthetic referee — V1.4 held-out (200 seeds/world, virgin seeds)
 
 | Validation item | Result |
 |---|---:|
-| H3 noise certified as H1 | 0 / 400 |
-| H2 hidden-crash momentum certified as H1 | 2 / 200 |
-| H1 momentum detected as H1 | 166 / 200 |
-| H1 reversal detected as H1 | 162 / 200 |
-| Pre-registered targets passed | 3 / 4 |
+| H3 noise certified as `H1` | 0 / 400 = 0.0% |
+| H2 hidden-crash momentum certified as `H1` (dangerous) | 2 / 200 = 1.0% |
+| H1 momentum detected as `H1` | 166 / 200 = 83.0% |
+| H1 reversal detected as `H1` | 162 / 200 = 81.0% |
+| Pre-registered targets met | 3 / 4 |
+| Dangerous-rate improvement V1.3 → V1.4 (paired, same worlds) | 5.0% → 1.0% (McNemar *p* ≈ 3.9e-3) |
 
-Main interpretation:
+> The referee is intentionally conservative: it nearly eliminates noise-to-alpha and hidden-crash-to-alpha misclassification, at a measured ~3–6 pp cost in true-alpha detection.
 
-> The referee is conservative: it nearly eliminates noise-to-alpha and hidden-crash-to-alpha misclassification, while accepting a measured detection cost.
+### Real public-data applications (frozen referee, yfinance + Ken French, 2007–2024)
 
----
+| Phase | Universe | `L2` residual-momentum net Sharpe | Verdict |
+|---|---|---:|---|
+| F0 | S&P 100 | +0.10 | `H3` |
+| F0b | S&P 500 | −0.02 | `H3` |
+| F0c | small/mid-cap (~202) | −0.59 | `H3` |
 
-### F0b — S&P500 public-data prototype
+Plus **F0d**, a pre-registered hidden-risk test: declared downside-risk and low-vol harvesters, both `H3` on real data (no premium survives costs), **but** (i) the offline demo confirms the `H2` path engages when a premium *does* exist, and (ii) the real `S1` vs `S2` contrast measures the tail battery's archetype-specificity (co-crash vs junk-rally).
 
-| Signal | L2 net Sharpe | Verdict |
-|---|---:|---|
-| Residual momentum | -0.02 | H3 |
-| Residual reversal | -0.58 | H3 |
-
-Interpretation:
-
-> Residual momentum improves relative to raw momentum but remains too weak to certify.
-
----
-
-### F0c-yf — small/mid-cap public-data robustness
-
-| Signal | L2 net Sharpe | Verdict |
-|---|---:|---|
-| Residual momentum | -0.59 | H3 |
-| Residual reversal | -0.34 | H3 |
-
-Interpretation:
-
-> The small/mid-cap robustness universe does not support residual momentum or reversal.
-
----
-
-### F0d — declared hidden-risk harvesters
-
-| Signal | L2 net Sharpe | DSR z | Tail score | Verdict |
-|---|---:|---:|---:|---|
-| Downside-risk harvester | -0.23 | -3.01 | 2 | H3 |
-| Low-vol harvester | -0.80 | -5.48 | 2 | H3 |
-
-Interpretation:
-
-> The signals show some tail-risk diagnostics but do not earn enough to force the H2 dilemma.
-
----
-
-## Relationship to Factor Momentum
-
-Factor Momentum is more investable and empirically concrete.  
-Tail-Aware Residual Alpha is more original and more aligned with alpha research judgement.
-
-| Dimension | Factor Momentum | Tail-Aware Residual Alpha |
-|---|---|---|
-| Tradable strategy | Stronger | Weaker |
-| Empirical positive result | Stronger | Weaker |
-| Originality | Lower | Higher |
-| Risk-to-alpha narrative | Moderate | Strong |
-| QR/Systematic research fit | Good | Very strong |
-| Current résumé readiness | Good | Good if packaged correctly |
-
-Best combined narrative:
-
-> Factor Momentum shows that I can implement and stress-test an investable systematic timing idea. Tail-Aware shows that I can build a conservative alpha-referee that does not confuse weak performance, hidden risk or luck with genuine alpha.
+> Three real findings: a monotone conservative-strong null across the size spectrum; the double luck gate beating a naive placebo screen (a flat strategy fooled the placebo but not the deflated-Sharpe hurdle); and the tail battery correctly measuring real crash/tail risk while withholding the `H2` label absent a surviving premium.
 
 ---
 
 ## What to say in interviews
 
-The strongest answer:
+> I wanted an alpha project that doesn't just optimize Sharpe. The framework asks whether a residual signal is genuine stock-specific predictability, hidden crash-risk compensation, or backtest luck — a four-state verdict with a quarantine state. I validated the referee on synthetic worlds with known ground truth, froze the rule with pre-registered targets, and confirmed it held out-of-sample. Then I applied the frozen referee to public equity data. It didn't certify alpha — which is the point — but it did three things I can defend: it beat a naive placebo screen (a near-flat strategy that fooled the placebo failed my deflated-Sharpe hurdle), it measured real tail risk when a strategy carried it, and it exposed its own limit — a tail battery tuned to market co-crashes generalizes only partly to a junk-rally archetype.
 
-> I wanted an alpha project that did not just optimize Sharpe. The framework asks whether a residual signal is genuine stock-specific predictability, hidden crash-risk compensation or backtest luck. I validated the referee on synthetic worlds where the ground truth is known, then applied it to public equity universes. The public runs did not certify alpha, which is exactly the point: the machine is designed to reject weak signals rather than overclaim.
+**Have ready:** why the double gate matters (cost-shifted placebo trap); why beta-only residuals (the intercept artifact); why `H0` exists (asymmetric loss of certifying hidden risk); the failed fifth-condition story; the pre-registered miss (83% vs 85%) as evidence of honesty.
 
 ---
 
-## What not to say
+## What *not* to say
 
-Avoid:
-
-- “I found alpha.”
-- “Residual momentum works.”
-- “This is a production strategy.”
-- “The public-data results are institutional-grade.”
-- “The V1.4 thresholds are universally valid.”
-
-Say instead:
-
-- “I built an alpha-validation framework.”
-- “The public-data tests rejected weak residual signals.”
-- “The project is about research discipline and hidden-risk diagnostics.”
-- “The next step would be CRSP/PIT data and richer cost/capacity modelling.”
+| Avoid | Say instead |
+|---|---|
+| "I found alpha." | "I built an alpha-validation framework." |
+| "Residual momentum works." | "The public-data tests rejected weak residual signals — by design." |
+| "This is a production strategy." | "These are public-data prototypes; the contribution is research discipline." |
+| "The public results are institutional-grade." | "Next step is CRSP/PIT data and richer cost/capacity modelling." |
+| "The V1.4 thresholds are universally valid." | "Thresholds are synthetic-calibrated; transfer to real data is an assumption I tested partially in F0d." |
 
 ---
 
 ## Final status
 
-**Status:** strong alpha-related project, currently best described as an alpha-validation framework rather than an alpha-generating strategy.
+**Status:** a complete, defensible alpha-validation framework — synthetic out-of-sample validation plus real-data stress tests — best described as an *alpha referee*, not an alpha-generating strategy. The real-data nulls are confirmations the referee is calibrated correctly, not shortcomings.
 
-**Résumé readiness:** yes, in a project list or selected research section.
-
-**One-page CV priority:** high for Quant Research/Systematic roles if space allows; otherwise use Factor Momentum for investable strategy evidence and Tail-Aware for risk-aware alpha research.
+**Résumé readiness:** yes — in a project list or a "selected research" section. High priority for Quant Research / Systematic roles when space allows.
